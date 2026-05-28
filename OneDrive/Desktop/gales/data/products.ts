@@ -215,8 +215,13 @@ export const products: Product[] = [
   }),
 ];
 
+function normalizeSlug(value: string): string {
+  return decodeURIComponent(value).trim().toLowerCase();
+}
+
 export function getProductBySlug(slug: string): Product | undefined {
-  return products.find((p) => p.slug === slug);
+  const normalized = normalizeSlug(slug);
+  return products.find((p) => normalizeSlug(p.slug) === normalized);
 }
 
 export function getProductsByCategory(category: string): Product[] {

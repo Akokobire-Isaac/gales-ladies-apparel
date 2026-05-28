@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { ProductDetail } from "@/components/product/product-detail";
 import { getProductBySlug, products } from "@/data/products";
 
@@ -13,7 +13,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
-  if (!product) return { title: "Product Not Found" };
+  if (!product) {
+    return {
+      title: "Shop",
+      description: "Browse our latest products.",
+    };
+  }
   return {
     title: product.name,
     description: product.description,
@@ -23,6 +28,6 @@ export async function generateMetadata({ params }: ProductPageProps) {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   const product = getProductBySlug(slug);
-  if (!product) notFound();
+  if (!product) redirect("/shop");
   return <ProductDetail product={product} />;
 }
